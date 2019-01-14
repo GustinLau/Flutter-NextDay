@@ -2,9 +2,9 @@
 
 使用Flutter模仿NextDay
 
-Flutter 练习项目，不要当真
+Flutter 练习项目，不要当真
 
-![截图](https://s2.ax1x.com/2019/01/14/FxRkQI.png)
+<img src="https://s2.ax1x.com/2019/01/14/FxRkQI.png" height = "500" alt="截图" align=center />
 
 原版在这里[NextDay](https://itunes.apple.com/cn/app/id491352621?mt=8)，只有iOS设备有，没有安卓版
 
