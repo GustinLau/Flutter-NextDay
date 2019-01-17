@@ -3,9 +3,11 @@ import 'dart:typed_data';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:next_day/base/bloc_base.dart';
 import 'package:next_day/model/info_model.dart';
 import 'package:next_day/util/adaptation_utils.dart';
+import 'package:next_day/util/image_utils.dart';
 import 'package:next_day/widget/day/day_bloc.dart';
 import 'package:next_day/widget/music_player/music_player.dart';
 
@@ -181,7 +183,7 @@ class Day extends StatelessWidget {
         placeholder: const Center(child: const CircularProgressIndicator()),
         imageUrl: InfoModel.realImagePath(AdaptationUtils.safeAreaBottom > 0
             ? state.info.images['iphone-x']
-            : state.info.images['big568h2x']),
+            : state.info.images['big568h3x']),
         fit: BoxFit.cover,
       ),
     );
@@ -198,7 +200,6 @@ class Day extends StatelessWidget {
           verticalDirection: VerticalDirection.up,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            // 音乐播放器
             _musicPlayer(state),
             _desc(state),
             _geo(state),
@@ -219,13 +220,28 @@ class Day extends StatelessWidget {
         onTap: state.hideAllView || state.showMainView
             ? null
             : () async {
+                Fluttertoast.showToast(
+                    msg: "正在保存...",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIos: 1,
+                    backgroundColor: Colors.black.withAlpha(200),
+                    textColor: Colors.white);
                 String uri = InfoModel.realImagePath(
                     AdaptationUtils.safeAreaBottom > 0
                         ? state.info.images['iphone-x']
                         : state.info.images['big568h2x']);
                 ByteData bytes =
                     await NetworkAssetBundle(Uri.base.resolve(uri)).load(uri);
-                // TODO 保存
+                int result =
+                    await ImageUtils.saveToAlbum(bytes.buffer.asUint8List());
+                Fluttertoast.showToast(
+                    msg: result == 1 ? "保存成功^_^" : "保存失败:(",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIos: 1,
+                    backgroundColor: Colors.black.withAlpha(200),
+                    textColor: Colors.white);
               },
         child: Container(
           padding: EdgeInsets.only(bottom: AdaptationUtils.safeAreaBottom + 40),
