@@ -22,6 +22,8 @@ dependencies:
   shared_preferences: ^0.4.3
   # 音频播放
   audioplayer: ^0.5.2
+  # Rx
+  rxdart: ^0.20.0
 
 dev_dependencies:
   flutter_test:
@@ -55,6 +57,7 @@ flutter:
   assets:
     - assets/icons/pause.png
     - assets/icons/play.png
+    - assets/icons/stop.png
     - assets/icons/save.png
 
   # To add custom fonts to your application, add a fonts section here,
@@ -79,6 +82,10 @@ flutter:
   fonts:
     - family: PingFang
       fonts:
-        - asset: assets/fonts/PingFang-SC-Thin.ttf
-          weight: 100
         - asset: assets/fonts/PingFang-SC.ttf
+    - family: Prompt
+      fonts:
+        - asset: assets/fonts/Prompt-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Prompt-Light.ttf
+          weight: 300

@@ -1,7 +1,7 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:next_day/page/home_page.dart';
+import 'package:next_day/base/bloc_base.dart';
+import 'package:next_day/page/home/home_page_bloc.dart';
+import 'package:next_day/page/home/home_page.dart';
 
 void main() => runApp(App());
 
@@ -13,7 +13,7 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(),
+      home: BlocProvider(bloc: HomePageBloc(), child: HomePage()),
     );
   }
 }
