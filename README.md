@@ -9,7 +9,3 @@ Flutter 练习项目，不要当真
 原版在这里[NextDay](https://itunes.apple.com/cn/app/id491352621?mt=8)，只有iOS设备有，没有安卓版
 
 接口使用[nextday-desktop](https://github.com/sanddudu/nextday-desktop) 
-
-## TODO
-- [ ] 日期选择
-- [ ] 设置页

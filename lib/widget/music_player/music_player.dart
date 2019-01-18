@@ -32,7 +32,7 @@ class MusicPlayer extends StatelessWidget {
             bottom: AdaptationUtils.adaptHeight(5) / 2,
             right: AdaptationUtils.adaptWidth(8)),
         child: Image.asset(
-            'assets/icons/${state.playing ? (musicPlayerBloc.isSameMusic()?'pause':'stop') : 'play'}.png',
+            'assets/icons/${state.playing ? (musicPlayerBloc.isSameMusic() ? 'pause' : 'stop') : 'play'}.png',
             width: AdaptationUtils.adaptWidth(35),
             height: AdaptationUtils.adaptHeight(35)),
       ),
@@ -83,8 +83,6 @@ class MusicPlayer extends StatelessWidget {
         ? Container()
         : Container(
             height: AdaptationUtils.adaptHeight(2),
-            width: AdaptationUtils.screenWidth -
-                AdaptationUtils.adaptWidth(35) * 2,
             margin: EdgeInsets.only(
                 left: AdaptationUtils.adaptWidth(35),
                 right: AdaptationUtils.adaptWidth(35),
@@ -93,9 +91,11 @@ class MusicPlayer extends StatelessWidget {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Container(
-                width: (AdaptationUtils.screenWidth -
-                        AdaptationUtils.adaptWidth(35) * 2) *
-                    state.progress,
+                width: ((AdaptationUtils.screenWidth /
+                            AdaptationUtils.deviceRatio -
+                        AdaptationUtils.adaptWidth(35) * 2 -
+                        AdaptationUtils.adaptWidth(16) * 2) *
+                    state.progress),
                 color: Colors.white,
               ),
             ),

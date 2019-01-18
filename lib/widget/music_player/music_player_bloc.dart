@@ -102,10 +102,12 @@ class MusicPlayerBloc {
   /// 判断当前页面歌曲与播放歌曲是否同一首
   bool isSameMusic() => _state.playingMusic == _state.currentMusic;
 
-  void dispose() {
-    _onAudioPositionChangedSubscription.cancel();
-    _onPlayerStateChangedSubscription.cancel();
-    _subject.close();
+  void dispose() async {
+    await _audioPlayer.stop();
+    await _onAudioPositionChangedSubscription.cancel();
+    await _onPlayerStateChangedSubscription.cancel();
+    await _subject.close();
+    _instance = null;
   }
 
   ValueObservable<MusicPlayerState> get stream => _subject.stream;
