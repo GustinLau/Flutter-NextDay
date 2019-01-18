@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:next_day/base/bloc_base.dart';
 import 'package:next_day/constant/api.dart';
 import 'package:next_day/model/info_model.dart';
+import 'package:next_day/page/setting/setting_page.dart';
 import 'package:next_day/service/cache_service.dart';
 import 'package:next_day/service/http_service.dart';
 import 'package:rxdart/rxdart.dart';
@@ -44,9 +47,15 @@ class HomePageBloc extends BlocBase {
             CacheService.save(key, json.encode(data));
             if (stop) {
               _state._dayInfoMap[key] = InfoModel.fromJson(data[key]);
+              if (_state._currentInfo == null) {
+                _state._currentInfo = _state._dayInfoMap[key];
+              }
               _subject.add(_state);
             } else {
               _state._dayInfoMap[key] = InfoModel.fromJson(data[key]);
+              if (_state._currentInfo == null) {
+                _state._currentInfo = _state._dayInfoMap[key];
+              }
             }
           },
           onError: (code) {
@@ -63,9 +72,15 @@ class HomePageBloc extends BlocBase {
       var data = json.decode(cachedDayInfoStr);
       if (stop) {
         _state._dayInfoMap[key] = InfoModel.fromJson(data[key]);
+        if (_state._currentInfo == null) {
+          _state._currentInfo = _state._dayInfoMap[key];
+        }
         _subject.add(_state);
       } else {
         _state._dayInfoMap[key] = InfoModel.fromJson(data[key]);
+        if (_state._currentInfo == null) {
+          _state._currentInfo = _state._dayInfoMap[key];
+        }
       }
     }
     if (!stop) {
@@ -89,6 +104,73 @@ class HomePageBloc extends BlocBase {
     }
   }
 
+  void setCurrentInfo(InfoModel info) {
+    _state._currentInfo = info;
+  }
+
+  void setStartDragPosition(Offset position) {
+    if (_state.dragPercent == 1) {
+      _state._startDragPosition = Offset(position.dx, position.dy - 200);
+    } else if (_state.dragPercent == -1) {
+      _state._startDragPosition = Offset(position.dx, position.dy + 200);
+    } else {
+      _state._startDragPosition = position;
+    }
+  }
+
+  void setCurrentDragPosition(Offset position) {
+    double diff = (position.dy - _state.startDragPosition.dy);
+    diff = diff < -200.0 ? -200.0 : diff;
+    diff = diff > 200.0 ? 200.0 : diff;
+    _state._dragPercent = diff / 200.0;
+    _subject.add(_state);
+  }
+
+  void setDragDirection(double direction) {
+    if (_state._dragType == 0) {
+      _state._dragType = direction >= 1 ? 1 : -1;
+    }
+    if (direction != 0) {
+      _state._dragDirection = direction;
+    }
+  }
+
+  void setDragging(bool dragging) {
+    _state._dragging = dragging;
+    if (!dragging) {
+      if (_state._dragPercent < 0) {
+        if (_state._dragDirection > 0) {
+          _state._dragPercent = 0;
+        } else {
+          _state._dragPercent = -1;
+        }
+        _subject.add(_state);
+      }
+    }
+  }
+
+  void showSetting(BuildContext context) {
+    _state._dragPercent = 0;
+    _subject.add(_state);
+    Navigator.push(
+        context,
+        PageRouteBuilder(
+            opaque: false,
+            pageBuilder: (BuildContext context, _, __) {
+              return SettingPage();
+            },
+            transitionsBuilder:
+                (_, Animation<double> animation, __, Widget child) {
+              return new SlideTransition(
+                position: new Tween<Offset>(
+                  begin: const Offset(0.0, 1.0),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              );
+            }));
+  }
+
   @override
   void dispose() {
     _subject.close();
@@ -97,12 +179,31 @@ class HomePageBloc extends BlocBase {
 
 class HomePageState {
   Map<String, InfoModel> _dayInfoMap = new Map();
+  InfoModel _currentInfo;
   bool _canScroll = true;
   bool _isScrolling = false;
 
+  Offset _startDragPosition;
+  double _dragDirection;
+  double _dragPercent = 0;
+
+  // -1 向上 0 初始状态 1 向下
+  int _dragType = 0;
+  bool _dragging = false;
+
   Map<String, InfoModel> get dayInfoMap => _dayInfoMap;
+
+  InfoModel get currentInfo => _currentInfo;
 
   bool get canScroll => _canScroll;
 
   bool get isScrolling => _isScrolling;
+
+  Offset get startDragPosition => _startDragPosition;
+
+  int get dragType => _dragType;
+
+  bool get dragging => _dragging;
+
+  double get dragPercent => _dragPercent;
 }

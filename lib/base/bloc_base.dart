@@ -53,5 +53,5 @@ class _BlocProviderInherited<T> extends InheritedWidget {
   final T bloc;
 
   @override
-  bool updateShouldNotify(_BlocProviderInherited oldWidget) => oldWidget!=this;
+  bool updateShouldNotify(_BlocProviderInherited oldWidget) => false;
 }

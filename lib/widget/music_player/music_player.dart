@@ -55,6 +55,7 @@ class MusicPlayer extends StatelessWidget {
                 ],
                 fontFamily: 'PingFang',
                 color: Colors.white,
+                fontWeight: FontWeight.w300,
                 decoration: TextDecoration.none,
                 fontSize: AdaptationUtils.adaptWidth(14)),
             overflow: TextOverflow.ellipsis),
@@ -68,9 +69,10 @@ class MusicPlayer extends StatelessWidget {
                     blurRadius: 4)
               ],
               fontFamily: 'PingFang',
+              fontWeight: FontWeight.w300,
               color: Colors.white,
               decoration: TextDecoration.none,
-              fontSize: AdaptationUtils.adaptWidth(11)),
+              fontSize: AdaptationUtils.adaptWidth(10)),
           overflow: TextOverflow.ellipsis,
         )
       ],

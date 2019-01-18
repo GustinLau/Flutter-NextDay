@@ -103,9 +103,11 @@ class MusicPlayerBloc {
   bool isSameMusic() => _state.playingMusic == _state.currentMusic;
 
   void dispose() async {
-    await _audioPlayer.stop();
-    await _onAudioPositionChangedSubscription.cancel();
-    await _onPlayerStateChangedSubscription.cancel();
+    if (_audioPlayer != null) {
+      await _audioPlayer.stop();
+      await _onAudioPositionChangedSubscription.cancel();
+      await _onPlayerStateChangedSubscription.cancel();
+    }
     await _subject.close();
     _instance = null;
   }

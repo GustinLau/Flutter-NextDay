@@ -69,7 +69,11 @@ class Day extends StatelessWidget {
           right: AdaptationUtils.adaptWidth(16),
           bottom: AdaptationUtils.adaptWidth(28)),
       child: Text(
-        '${MONTHS[state.info.getDateTime().month - 1]}.${WEEKS[state.info.getDateTime().weekday - 1]}' +
+        '${MONTHS[state.info
+            .getDateTime()
+            .month - 1]}.${WEEKS[state.info
+            .getDateTime()
+            .weekday - 1]}' +
             (state.info.event == null ? '' : ',${state.info.event}'),
         style: TextStyle(
             fontFamily: 'Prompt',
@@ -102,6 +106,7 @@ class Day extends StatelessWidget {
                   color: Color(0x88000000), offset: Offset(2, 2), blurRadius: 4)
             ],
             color: Colors.white,
+            fontWeight: FontWeight.w300,
             decoration: TextDecoration.none,
             fontSize: AdaptationUtils.adaptWidth(13)),
       ),
@@ -118,11 +123,12 @@ class Day extends StatelessWidget {
       padding: const EdgeInsets.only(left: 4, right: 4),
       color: Color(
           (int.parse(state.info.colors.background.substring(1), radix: 16)) |
-              0xFF000000),
+          0xFF000000),
       child: Text(
         state.info.text.short,
         style: TextStyle(
             fontFamily: 'PingFang',
+            fontWeight: FontWeight.w300,
             color: Colors.white,
             decoration: TextDecoration.none,
             fontSize: AdaptationUtils.adaptWidth(14)),
@@ -151,26 +157,31 @@ class Day extends StatelessWidget {
             top: AdaptationUtils.adaptHeight(40),
             bottom: AdaptationUtils.safeAreaBottom),
         height:
-            (AdaptationUtils.safeAreaBottom + AdaptationUtils.adaptHeight(100)),
+        (AdaptationUtils.safeAreaBottom + AdaptationUtils.adaptHeight(100)),
         child: Stack(
           children: <Widget>[
             MusicPlayer(musicModel: state.info.music),
-            Container(
-              height: AdaptationUtils.adaptHeight(35),
-              child: Align(
-                alignment: Alignment.bottomRight,
-                child: Text(
-                  state.info.author == null ? '' : '@${state.info.author.name}',
-                  style: TextStyle(
-                      color: const Color(0xEEEEEEEE),
-                      fontFamily: 'PingFang',
-                      fontSize: AdaptationUtils.adaptWidth(13),
-                      fontWeight: FontWeight.normal,
-                      decoration: TextDecoration.none),
-                ),
-              ),
-            ),
+            _author(state)
           ],
+        ),
+      ),
+    );
+  }
+
+  // 照片作者
+  Widget _author(DayState state) {
+    return Container(
+      height: AdaptationUtils.adaptHeight(35),
+      child: Align(
+        alignment: Alignment.bottomRight,
+        child: Text(
+          state.info.author == null ? '' : '@${state.info.author.name}',
+          style: TextStyle(
+              color: const Color(0x88EEEEEE),
+              fontFamily: 'PingFang',
+              fontSize: AdaptationUtils.adaptWidth(12),
+              fontWeight: FontWeight.w300,
+              decoration: TextDecoration.none),
         ),
       ),
     );
@@ -220,29 +231,29 @@ class Day extends StatelessWidget {
         onTap: state.hideAllView || state.showMainView
             ? null
             : () async {
-                Fluttertoast.showToast(
-                    msg: "正在保存...",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.CENTER,
-                    timeInSecForIos: 1,
-                    backgroundColor: Colors.black.withAlpha(200),
-                    textColor: Colors.white);
-                String uri = InfoModel.realImagePath(
-                    AdaptationUtils.safeAreaBottom > 0
-                        ? state.info.images['iphone-x']
-                        : state.info.images['big568h2x']);
-                ByteData bytes =
-                    await NetworkAssetBundle(Uri.base.resolve(uri)).load(uri);
-                int result =
-                    await ImageUtils.saveToAlbum(bytes.buffer.asUint8List());
-                Fluttertoast.showToast(
-                    msg: result == 1 ? "保存成功^_^" : "保存失败:(",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.CENTER,
-                    timeInSecForIos: 1,
-                    backgroundColor: Colors.black.withAlpha(200),
-                    textColor: Colors.white);
-              },
+          Fluttertoast.showToast(
+              msg: "正在保存...",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIos: 1,
+              backgroundColor: Colors.black.withAlpha(200),
+              textColor: Colors.white);
+          String uri = InfoModel.realImagePath(
+              AdaptationUtils.safeAreaBottom > 0
+                  ? state.info.images['iphone-x']
+                  : state.info.images['big568h2x']);
+          ByteData bytes =
+          await NetworkAssetBundle(Uri.base.resolve(uri)).load(uri);
+          int result =
+          await ImageUtils.saveToAlbum(bytes.buffer.asUint8List());
+          Fluttertoast.showToast(
+              msg: result == 1 ? "保存成功^_^" : "保存失败:(",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIos: 1,
+              backgroundColor: Colors.black.withAlpha(200),
+              textColor: Colors.white);
+        },
         child: Container(
           padding: EdgeInsets.only(bottom: AdaptationUtils.safeAreaBottom + 40),
           child: Align(
@@ -267,24 +278,24 @@ class Day extends StatelessWidget {
           return state.info == null
               ? Container()
               : Container(
-                  child: GestureDetector(
-                    onTap: () {
-                      dayBloc.toggleView();
-                    },
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: <Widget>[
-                        _image(snapshot.data),
-                        Stack(
-                          children: <Widget>[
-                            _mainView(snapshot.data),
-                            _downloadView(snapshot.data)
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                );
+            child: GestureDetector(
+              onTap: () {
+                dayBloc.toggleView();
+              },
+              child: Stack(
+                fit: StackFit.expand,
+                children: <Widget>[
+                  _image(snapshot.data),
+                  Stack(
+                    children: <Widget>[
+                      _mainView(snapshot.data),
+                      _downloadView(snapshot.data)
+                    ],
+                  )
+                ],
+              ),
+            ),
+          );
         });
   }
 }

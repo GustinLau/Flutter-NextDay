@@ -1,7 +1,10 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:next_day/base/bloc_base.dart';
 import 'package:next_day/page/home/home_page_bloc.dart';
+import 'package:next_day/util/adaptation_utils.dart';
 import 'package:next_day/widget/day/day.dart';
 import 'package:next_day/widget/day/day_bloc.dart';
 import 'package:next_day/widget/music_player/music_player_bloc.dart';
@@ -29,38 +32,100 @@ class HomePage extends StatelessWidget {
                   bloc.setScrolling(false);
                 }
               },
-              child: PageView.builder(
-                  controller: PageController(viewportFraction: 1),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: state.dayInfoMap.length,
-                  reverse: true,
-                  physics: state.canScroll
-                      ? const BouncingScrollPhysics()
-                      : const NeverScrollableScrollPhysics(),
-                  onPageChanged: (i) {
-                    MusicPlayerBloc.instance.updateMusic(
-                        state.dayInfoMap[bloc.keyWithOffset(i)].music);
-                    if (i == state.dayInfoMap.length - 1) {
-                      bloc.getInfoWithOffset(i + 1);
-                    }
-                  },
-                  itemBuilder: (context, i) {
-                    String key = bloc.keyWithOffset(i);
-                    return Column(
-                      children: <Widget>[
-                        Expanded(
-                          child: BlocProvider(
-                            bloc: DayBloc(
-                                homePageBloc: bloc,
-                                info: state.dayInfoMap.containsKey(key)
-                                    ? state.dayInfoMap[key]
-                                    : null),
-                            child: Day(),
-                          ),
-                        )
-                      ],
-                    );
-                  }),
+              child: GestureDetector(
+                onVerticalDragDown: !state.canScroll
+                    ? null
+                    : (DragDownDetails details) =>
+                        bloc.setStartDragPosition(details.globalPosition),
+                onVerticalDragStart: !state.canScroll
+                    ? null
+                    : (DragStartDetails details) => bloc.setDragging(true),
+                onVerticalDragUpdate: !state.canScroll
+                    ? null
+                    : (DragUpdateDetails details) {
+                        bloc.setDragDirection(details.delta.direction);
+                        bloc.setCurrentDragPosition(details.globalPosition);
+                      },
+                onVerticalDragEnd: !state.canScroll
+                    ? null
+                    : (DragEndDetails details) {
+                        bloc.setDragging(false);
+                      },
+                child: Stack(children: [
+                  PageView.builder(
+                      controller: PageController(viewportFraction: 1),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: state.dayInfoMap.length,
+                      reverse: true,
+                      physics: state.canScroll
+                          ? const BouncingScrollPhysics()
+                          : const NeverScrollableScrollPhysics(),
+                      onPageChanged: (i) {
+                        String key = bloc.keyWithOffset(i);
+                        MusicPlayerBloc.instance.updateMusic(
+                            state.dayInfoMap[bloc.keyWithOffset(i)].music);
+                        bloc.setCurrentInfo(state.dayInfoMap.containsKey(key)
+                            ? state.dayInfoMap[key]
+                            : null);
+                        if (i == state.dayInfoMap.length - 1) {
+                          bloc.getInfoWithOffset(i + 1);
+                        }
+                      },
+                      itemBuilder: (context, i) {
+                        String key = bloc.keyWithOffset(i);
+                        return Column(
+                          children: <Widget>[
+                            Expanded(
+                              child: BlocProvider(
+                                bloc: DayBloc(
+                                    homePageBloc: bloc,
+                                    info: state.dayInfoMap.containsKey(key)
+                                        ? state.dayInfoMap[key]
+                                        : null),
+                                child: Day(),
+                              ),
+                            )
+                          ],
+                        );
+                      }),
+                  state.dragPercent >= 0
+                      ? Container()
+                      : Container(
+                          child: Stack(
+                          children: <Widget>[
+                            BackdropFilter(
+                              filter: ImageFilter.blur(
+                                  sigmaX: -state.dragPercent * 15.0,
+                                  sigmaY: -state.dragPercent * 15.0),
+                              child: Container(
+                                  color: state.currentInfo != null
+                                      ? Color((int.parse(
+                                                  state.currentInfo.colors
+                                                      .background
+                                                      .substring(1),
+                                                  radix: 16)) |
+                                              0xFF000000)
+                                          .withOpacity(-state.dragPercent * 0.5)
+                                      : Colors.black38.withOpacity(
+                                          -state.dragPercent * 0.5)),
+                            ),
+                            Opacity(
+                              opacity: -state.dragPercent,
+                              child: GestureDetector(
+                                onTap: (){
+                                  bloc.showSetting(context);
+                                },
+                                child: Center(
+                                  child: Image.asset('assets/icons/about.png',
+                                      width: AdaptationUtils.adaptWidth(70),
+                                      height: AdaptationUtils.adaptWidth(70)),
+                                ),
+                              ),
+                            )
+                          ],
+                        ))
+                ]),
+              ),
             ),
           );
         });
