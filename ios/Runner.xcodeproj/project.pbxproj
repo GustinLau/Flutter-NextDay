@@ -10,6 +10,8 @@
 		092256A821F04B07009042FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 092256A721F04B07009042FC /* Assets.xcassets */; };
 		094C433221F084150035078D /* LocalPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 094C433121F084150035078D /* LocalPluginRegistrant.m */; };
 		094C433521F084C90035078D /* ImageSaverPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 094C433421F084C90035078D /* ImageSaverPlugin.m */; };
+		09B0C44121F6FE4000F8C18E /* NDCacheManagerPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 09B0C44021F6FE4000F8C18E /* NDCacheManagerPlugin.m */; };
+		09B0C44421F703A800F8C18E /* NDSharePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 09B0C44321F703A800F8C18E /* NDSharePlugin.m */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		2D5378261FAA1A9400D5DBA9 /* flutter_assets in Resources */ = {isa = PBXBuildFile; fileRef = 2D5378251FAA1A9400D5DBA9 /* flutter_assets */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
@@ -46,6 +48,10 @@
 		094C433121F084150035078D /* LocalPluginRegistrant.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocalPluginRegistrant.m; sourceTree = "<group>"; };
 		094C433321F084C90035078D /* ImageSaverPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageSaverPlugin.h; sourceTree = "<group>"; };
 		094C433421F084C90035078D /* ImageSaverPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageSaverPlugin.m; sourceTree = "<group>"; };
+		09B0C43F21F6FE4000F8C18E /* NDCacheManagerPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NDCacheManagerPlugin.h; sourceTree = "<group>"; };
+		09B0C44021F6FE4000F8C18E /* NDCacheManagerPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NDCacheManagerPlugin.m; sourceTree = "<group>"; };
+		09B0C44221F703A800F8C18E /* NDSharePlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NDSharePlugin.h; sourceTree = "<group>"; };
+		09B0C44321F703A800F8C18E /* NDSharePlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NDSharePlugin.m; sourceTree = "<group>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		2D5378251FAA1A9400D5DBA9 /* flutter_assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = flutter_assets; path = Flutter/flutter_assets; sourceTree = SOURCE_ROOT; };
@@ -92,6 +98,10 @@
 			children = (
 				094C433321F084C90035078D /* ImageSaverPlugin.h */,
 				094C433421F084C90035078D /* ImageSaverPlugin.m */,
+				09B0C43F21F6FE4000F8C18E /* NDCacheManagerPlugin.h */,
+				09B0C44021F6FE4000F8C18E /* NDCacheManagerPlugin.m */,
+				09B0C44221F703A800F8C18E /* NDSharePlugin.h */,
+				09B0C44321F703A800F8C18E /* NDSharePlugin.m */,
 			);
 			path = Plugins;
 			sourceTree = "<group>";
@@ -202,6 +212,7 @@
 		97C146E61CF9000F007C117D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = ND;
 				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = "The Chromium Authors";
 				TargetAttributes = {
@@ -319,7 +330,9 @@
 			files = (
 				978B8F6F1D3862AE00F588F7 /* AppDelegate.m in Sources */,
 				97C146F31CF9000F007C117D /* main.m in Sources */,
+				09B0C44421F703A800F8C18E /* NDSharePlugin.m in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
+				09B0C44121F6FE4000F8C18E /* NDCacheManagerPlugin.m in Sources */,
 				094C433521F084C90035078D /* ImageSaverPlugin.m in Sources */,
 				094C433221F084150035078D /* LocalPluginRegistrant.m in Sources */,
 			);

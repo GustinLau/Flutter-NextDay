@@ -1,15 +1,12 @@
-import 'dart:typed_data';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter/rendering.dart';
 import 'package:next_day/base/bloc_base.dart';
 import 'package:next_day/model/info_model.dart';
+import 'package:next_day/page/home/home_page_bloc.dart';
 import 'package:next_day/util/adaptation_utils.dart';
-import 'package:next_day/util/image_utils.dart';
-import 'package:next_day/widget/day/day_bloc.dart';
 import 'package:next_day/widget/music_player/music_player.dart';
+import 'package:next_day/widget/music_player/music_player_bloc.dart';
 
 class Day extends StatelessWidget {
   static const List<String> MONTHS = [
@@ -36,53 +33,52 @@ class Day extends StatelessWidget {
     'SUNDAY'
   ];
 
+  final InfoModel info;
+  final bool showMainView;
+  final bool hideAllView;
+
+  Day({this.info, this.showMainView, this.hideAllView});
+
   // 日期
-  Widget _date(DayState state) {
+  Widget _date() {
     return Container(
-      height: AdaptationUtils.adaptHeight(130),
       margin: EdgeInsets.only(
           left: AdaptationUtils.adaptWidth(16),
-          right: AdaptationUtils.adaptWidth(16),
-          bottom: AdaptationUtils.adaptHeight(5)),
+          right: AdaptationUtils.adaptWidth(16)),
       child: Text(
-        state.info.dateKey.substring(6),
+        info.dateKey.substring(6),
         style: TextStyle(
             shadows: const [
               const Shadow(
-                  color: Color(0x88000000), offset: Offset(2, 2), blurRadius: 4)
+                  color: Color(0x66000000), offset: Offset(2, 2), blurRadius: 5)
             ],
-            fontFamily: 'Prompt',
-            fontWeight: FontWeight.w100,
+            fontFamily: 'SourceHanSansCN',
+            fontWeight: FontWeight.w200,
             color: Colors.white,
-            letterSpacing: 5,
             decoration: TextDecoration.none,
-            fontSize: AdaptationUtils.adaptWidth(120)),
+            fontSize: AdaptationUtils.adaptWidth(150)),
       ),
     );
   }
 
   // 月份 星期 特别日子
-  Widget _dateInfo(DayState state) {
+  Widget _dateInfo() {
     return Container(
       margin: EdgeInsets.only(
           left: AdaptationUtils.adaptWidth(16),
           right: AdaptationUtils.adaptWidth(16),
-          bottom: AdaptationUtils.adaptWidth(28)),
+          bottom: AdaptationUtils.adaptWidth(80)),
       child: Text(
-        '${MONTHS[state.info
-            .getDateTime()
-            .month - 1]}.${WEEKS[state.info
-            .getDateTime()
-            .weekday - 1]}' +
-            (state.info.event == null ? '' : ',${state.info.event}'),
+        '${MONTHS[info.getDateTime().month - 1]}.${WEEKS[info.getDateTime().weekday - 1]}' +
+            (info.event == null ? '' : ',${info.event}'),
         style: TextStyle(
-            fontFamily: 'Prompt',
+            fontFamily: 'SourceHanSansCN',
             fontWeight: FontWeight.w300,
             shadows: const [
               const Shadow(
-                  color: Color(0x88000000), offset: Offset(2, 2), blurRadius: 4)
+                  color: Color(0x66000000), offset: Offset(2, 2), blurRadius: 4)
             ],
-            letterSpacing: 1,
+            letterSpacing: 1.8,
             color: Colors.white,
             decoration: TextDecoration.none,
             fontSize: AdaptationUtils.adaptWidth(22)),
@@ -91,43 +87,43 @@ class Day extends StatelessWidget {
   }
 
   // 地点
-  Widget _geo(DayState state) {
+  Widget _geo() {
     return Container(
       padding: EdgeInsets.only(
           left: AdaptationUtils.adaptWidth(16),
           right: AdaptationUtils.adaptWidth(16),
-          bottom: AdaptationUtils.adaptHeight(4)),
+          bottom: AdaptationUtils.adaptHeight(6)),
       child: Text(
-        state.info.geo.reverse,
+        info.geo.reverse,
         style: TextStyle(
-            fontFamily: 'PingFang',
+            fontFamily: 'SourceHanSansCN',
             shadows: const [
               const Shadow(
-                  color: Color(0x88000000), offset: Offset(2, 2), blurRadius: 4)
+                  color: Color(0x66000000), offset: Offset(2, 2), blurRadius: 4)
             ],
             color: Colors.white,
             fontWeight: FontWeight.w300,
             decoration: TextDecoration.none,
-            fontSize: AdaptationUtils.adaptWidth(13)),
+            fontSize: AdaptationUtils.adaptWidth(13.5)),
       ),
     );
   }
 
   // 描述
-  Widget _desc(DayState state) {
+  Widget _desc() {
     return Container(
       margin: EdgeInsets.only(
         left: AdaptationUtils.adaptWidth(16),
         right: AdaptationUtils.adaptWidth(16),
       ),
-      padding: const EdgeInsets.only(left: 4, right: 4),
+      padding: const EdgeInsets.only(left: 4, right: 4, bottom: 2, top: 2),
       color: Color(
-          (int.parse(state.info.colors.background.substring(1), radix: 16)) |
-          0xFF000000),
+          (int.parse(info.colors.background.substring(1), radix: 16)) |
+              0xFF000000),
       child: Text(
-        state.info.text.short,
+        info.text.short,
         style: TextStyle(
-            fontFamily: 'PingFang',
+            fontFamily: 'SourceHanSansCN',
             fontWeight: FontWeight.w300,
             color: Colors.white,
             decoration: TextDecoration.none,
@@ -137,7 +133,7 @@ class Day extends StatelessWidget {
   }
 
   // 音乐播放器
-  Widget _musicPlayer(DayState state) {
+  Widget _musicPlayer() {
     return DecoratedBox(
       decoration: const BoxDecoration(
         gradient: const LinearGradient(
@@ -154,14 +150,14 @@ class Day extends StatelessWidget {
         padding: EdgeInsets.only(
             left: AdaptationUtils.adaptWidth(16),
             right: AdaptationUtils.adaptWidth(16),
-            top: AdaptationUtils.adaptHeight(40),
+            top: AdaptationUtils.adaptHeight(50),
             bottom: AdaptationUtils.safeAreaBottom),
         height:
-        (AdaptationUtils.safeAreaBottom + AdaptationUtils.adaptHeight(100)),
+            (AdaptationUtils.safeAreaBottom + AdaptationUtils.adaptHeight(110)),
         child: Stack(
           children: <Widget>[
-            MusicPlayer(musicModel: state.info.music),
-            _author(state)
+            MusicPlayer(musicModel: info.music),
+            _author()
           ],
         ),
       ),
@@ -169,16 +165,16 @@ class Day extends StatelessWidget {
   }
 
   // 照片作者
-  Widget _author(DayState state) {
+  Widget _author() {
     return Container(
       height: AdaptationUtils.adaptHeight(35),
       child: Align(
         alignment: Alignment.bottomRight,
         child: Text(
-          state.info.author == null ? '' : '@${state.info.author.name}',
+          info.author == null ? '' : '@${info.author.name}',
           style: TextStyle(
               color: const Color(0x88EEEEEE),
-              fontFamily: 'PingFang',
+              fontFamily: 'SourceHanSansCN',
               fontSize: AdaptationUtils.adaptWidth(12),
               fontWeight: FontWeight.w300,
               decoration: TextDecoration.none),
@@ -188,77 +184,59 @@ class Day extends StatelessWidget {
   }
 
   // 图片
-  Widget _image(DayState state) {
+  Widget _image() {
     return Container(
       child: CachedNetworkImage(
         placeholder: const Center(child: const CircularProgressIndicator()),
         imageUrl: InfoModel.realImagePath(AdaptationUtils.safeAreaBottom > 0
-            ? state.info.images['iphone-x']
-            : state.info.images['big568h3x']),
+            ? info.images['iphone-x']
+            : info.images['big568h3x']),
         fit: BoxFit.cover,
       ),
     );
   }
 
   // 主界面
-  Widget _mainView(DayState state) {
+  Widget _mainView() {
     return AnimatedOpacity(
       duration: const Duration(milliseconds: 200),
-      opacity: state.hideAllView ? 0 : (state.showMainView ? 1 : 0),
+      opacity: hideAllView ? 0 : (showMainView ? 1 : 0),
       child: Container(
         color: Colors.transparent,
         child: Column(
           verticalDirection: VerticalDirection.up,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            _musicPlayer(state),
-            _desc(state),
-            _geo(state),
-            _dateInfo(state),
-            _date(state),
+            _musicPlayer(),
+            _desc(),
+            _geo(),
+            _dateInfo(),
+            _date(),
           ],
         ),
       ),
     );
   }
 
-  // 下载界面
-  Widget _downloadView(DayState state) {
+  // 分享
+  Widget _shareView(HomePageBloc bloc) {
     return AnimatedOpacity(
       duration: const Duration(milliseconds: 200),
-      opacity: state.hideAllView ? 0 : (state.showMainView ? 0 : 1),
+      opacity: hideAllView ? 0 : (showMainView ? 0 : 1),
       child: GestureDetector(
-        onTap: state.hideAllView || state.showMainView
+        onTap: hideAllView || showMainView
             ? null
             : () async {
-          Fluttertoast.showToast(
-              msg: "正在保存...",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIos: 1,
-              backgroundColor: Colors.black.withAlpha(200),
-              textColor: Colors.white);
-          String uri = InfoModel.realImagePath(
-              AdaptationUtils.safeAreaBottom > 0
-                  ? state.info.images['iphone-x']
-                  : state.info.images['big568h2x']);
-          ByteData bytes =
-          await NetworkAssetBundle(Uri.base.resolve(uri)).load(uri);
-          int result =
-          await ImageUtils.saveToAlbum(bytes.buffer.asUint8List());
-          Fluttertoast.showToast(
-              msg: result == 1 ? "保存成功^_^" : "保存失败:(",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIos: 1,
-              backgroundColor: Colors.black.withAlpha(200),
-              textColor: Colors.white);
-        },
+          MusicPlayerBloc.instance.hide(true);
+          bloc.setCanScroll(!bloc.state.canScroll);
+                Future.delayed(
+                    const Duration(milliseconds: 300), () => bloc.share());
+              },
         child: Container(
           padding: EdgeInsets.only(bottom: AdaptationUtils.safeAreaBottom + 40),
           child: Align(
             alignment: Alignment.bottomCenter,
-            child: Image.asset('assets/icons/save.png',
+            child: Image.asset('assets/icons/share.png',
                 width: AdaptationUtils.adaptWidth(60),
                 height: AdaptationUtils.adaptHeight(60)),
           ),
@@ -269,33 +247,27 @@ class Day extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DayBloc dayBloc = BlocProvider.of(context);
-    return StreamBuilder<DayState>(
-        stream: dayBloc.stream,
-        initialData: dayBloc.state,
-        builder: (BuildContext context, AsyncSnapshot<DayState> snapshot) {
-          DayState state = snapshot.data;
-          return state.info == null
-              ? Container()
-              : Container(
+    final HomePageBloc bloc = BlocProvider.of(context);
+    return info == null
+        ? Container()
+        : Container(
             child: GestureDetector(
               onTap: () {
-                dayBloc.toggleView();
+                bloc.setCanScroll(!bloc.state.canScroll);
               },
               child: Stack(
                 fit: StackFit.expand,
                 children: <Widget>[
-                  _image(snapshot.data),
+                  _image(),
                   Stack(
                     children: <Widget>[
-                      _mainView(snapshot.data),
-                      _downloadView(snapshot.data)
+                      _mainView(),
+                      _shareView(bloc)
                     ],
                   )
                 ],
               ),
             ),
           );
-        });
   }
 }

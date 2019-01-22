@@ -1,13 +1,19 @@
 import 'dart:convert';
-import 'dart:ui';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:next_day/base/bloc_base.dart';
 import 'package:next_day/constant/api.dart';
 import 'package:next_day/model/info_model.dart';
 import 'package:next_day/page/setting/setting_page.dart';
+import 'package:next_day/plugin/share_plugin.dart';
 import 'package:next_day/service/cache_service.dart';
 import 'package:next_day/service/http_service.dart';
+import 'package:next_day/util/adaptation_utils.dart';
+import 'package:next_day/widget/music_player/music_player_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
 class HomePageBloc extends BlocBase {
@@ -90,6 +96,8 @@ class HomePageBloc extends BlocBase {
 
   void getInfoWithOffset(int offset) => _getInfoWithOffset(offset);
 
+  void setGlobalKey(GlobalKey globalKey) => _state._globalKey = globalKey;
+
   void setScrolling(bool isScrolling) {
     if (isScrolling != _state.isScrolling) {
       _state._isScrolling = isScrolling;
@@ -106,6 +114,23 @@ class HomePageBloc extends BlocBase {
 
   void setCurrentInfo(InfoModel info) {
     _state._currentInfo = info;
+  }
+
+  void share() async {
+    Fluttertoast.showToast(
+        msg: '请稍候...',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIos: 1,
+        backgroundColor: Colors.black.withAlpha(200),
+        textColor: Colors.white);
+    RenderRepaintBoundary boundary =
+        _state._globalKey.currentContext.findRenderObject();
+    ui.Image image =
+        await boundary.toImage(pixelRatio: AdaptationUtils.deviceRatio);
+    ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    await SharePlugin.share(byteData.buffer.asUint8List());
+    MusicPlayerBloc.instance.hide(false);
   }
 
   void setStartDragPosition(Offset position) {
@@ -153,22 +178,20 @@ class HomePageBloc extends BlocBase {
     _state._dragPercent = 0;
     _subject.add(_state);
     Navigator.push(
-        context,
-        PageRouteBuilder(
-            opaque: false,
-            pageBuilder: (BuildContext context, _, __) {
-              return SettingPage();
-            },
-            transitionsBuilder:
-                (_, Animation<double> animation, __, Widget child) {
-              return new SlideTransition(
-                position: new Tween<Offset>(
-                  begin: const Offset(0.0, 1.0),
-                  end: Offset.zero,
-                ).animate(animation),
-                child: child,
-              );
-            }));
+      context,
+      PageRouteBuilder(
+          opaque: false,
+          pageBuilder: (BuildContext context, _, __) => SettingPage(),
+          transitionsBuilder:
+              (_, Animation<double> animation, __, Widget child) =>
+                  SlideTransition(
+                    position: new Tween<Offset>(
+                      begin: const Offset(0.0, 1.0),
+                      end: Offset.zero,
+                    ).animate(animation),
+                    child: child,
+                  )),
+    );
   }
 
   @override
@@ -182,6 +205,7 @@ class HomePageState {
   InfoModel _currentInfo;
   bool _canScroll = true;
   bool _isScrolling = false;
+  GlobalKey _globalKey;
 
   Offset _startDragPosition;
   double _dragDirection;
@@ -206,4 +230,6 @@ class HomePageState {
   bool get dragging => _dragging;
 
   double get dragPercent => _dragPercent;
+
+  GlobalKey get globalKey => _globalKey;
 }

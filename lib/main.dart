@@ -14,9 +14,6 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     int lastClickTime = 0;
     return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
       home: WillPopScope(
           onWillPop: (){
             int nowTime = new DateTime.now().microsecondsSinceEpoch;

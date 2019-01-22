@@ -28,6 +28,7 @@ class BlocProvider<T extends BlocBase> extends StatefulWidget {
 }
 
 class _BlocProviderState<T extends BlocBase> extends State<BlocProvider<T>>{
+
   @override
   void dispose(){
     widget.bloc?.dispose();
@@ -53,5 +54,5 @@ class _BlocProviderInherited<T> extends InheritedWidget {
   final T bloc;
 
   @override
-  bool updateShouldNotify(_BlocProviderInherited oldWidget) => false;
+  bool updateShouldNotify(_BlocProviderInherited oldWidget) => true;
 }

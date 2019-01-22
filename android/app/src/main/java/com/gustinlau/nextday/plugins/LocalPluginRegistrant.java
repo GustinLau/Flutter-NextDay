@@ -7,7 +7,8 @@ public class LocalPluginRegistrant {
         if (alreadyRegisteredWith(registry)) {
             return;
         }
-        ImageSaverPlugin.registerWith(registry.registrarFor(" com.gustinlau.nextday.plugins.ImageSaverPlugin"));
+        CacheManagerPlugin.registerWith(registry.registrarFor(" com.gustinlau.nextday.plugins.CacheManagerPlugin"));
+        SharePlugin.registerWith(registry.registrarFor(" com.gustinlau.nextday.plugins.SharePlugin"));
     }
 
     private static boolean alreadyRegisteredWith(PluginRegistry registry) {

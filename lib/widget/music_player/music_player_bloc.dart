@@ -64,6 +64,13 @@ class MusicPlayerBloc {
     }
   }
 
+  void hide(bool hide) {
+    if (_state._hide != hide) {
+      _state._hide = hide;
+      _subject.add(_state);
+    }
+  }
+
   /// 播放
   void play() async {
     _initPlayer();
@@ -120,6 +127,7 @@ class MusicPlayerBloc {
 class MusicPlayerState {
   MusicModel _playingMusic;
   MusicModel _currentMusic;
+  bool _hide = false;
   bool _playing = false;
   double _progress = 0;
   bool _enabledButton = true;
@@ -127,6 +135,8 @@ class MusicPlayerState {
   MusicPlayerState();
 
   MusicModel get playingMusic => _playingMusic;
+
+  bool get hide => _hide;
 
   bool get playing => _playing;
 

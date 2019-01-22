@@ -45,7 +45,30 @@ class MusicPlayer extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
-        Text(state.playing ? state.playingMusic.name : state.currentMusic.name,
+        Padding(
+          padding: const EdgeInsets.only(bottom: 1.5),
+          child: Text(
+              state.playing ? state.playingMusic.name : state.currentMusic.name,
+              style: TextStyle(
+                  shadows: const [
+                    const Shadow(
+                        color: Color(0x88000000),
+                        offset: Offset(2, 2),
+                        blurRadius: 4)
+                  ],
+                  fontFamily: 'SourceHanSansCN',
+                  color: Colors.white,
+                  fontWeight: FontWeight.w300,
+                  decoration: TextDecoration.none,
+                  fontSize: AdaptationUtils.adaptWidth(14)),
+              overflow: TextOverflow.ellipsis),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 1.5),
+          child: Text(
+            state.playing
+                ? state.playingMusic.artist
+                : state.currentMusic.artist,
             style: TextStyle(
                 shadows: const [
                   const Shadow(
@@ -53,27 +76,13 @@ class MusicPlayer extends StatelessWidget {
                       offset: Offset(2, 2),
                       blurRadius: 4)
                 ],
-                fontFamily: 'PingFang',
-                color: Colors.white,
+                fontFamily: 'SourceHanSansCN',
                 fontWeight: FontWeight.w300,
+                color: Colors.white,
                 decoration: TextDecoration.none,
-                fontSize: AdaptationUtils.adaptWidth(14)),
-            overflow: TextOverflow.ellipsis),
-        Text(
-          state.playing ? state.playingMusic.artist : state.currentMusic.artist,
-          style: TextStyle(
-              shadows: const [
-                const Shadow(
-                    color: Color(0x88000000),
-                    offset: Offset(2, 2),
-                    blurRadius: 4)
-              ],
-              fontFamily: 'PingFang',
-              fontWeight: FontWeight.w300,
-              color: Colors.white,
-              decoration: TextDecoration.none,
-              fontSize: AdaptationUtils.adaptWidth(10)),
-          overflow: TextOverflow.ellipsis,
+                fontSize: AdaptationUtils.adaptWidth(10)),
+            overflow: TextOverflow.ellipsis,
+          ),
         )
       ],
     );
@@ -116,7 +125,7 @@ class MusicPlayer extends StatelessWidget {
         builder:
             (BuildContext context, AsyncSnapshot<MusicPlayerState> snapshot) {
           MusicPlayerState state = snapshot.data;
-          return !state.playing && (state.currentMusic == null)
+          return state.hide || (!state.playing && (state.currentMusic == null))
               ? Container()
               : Container(
                   child: Column(

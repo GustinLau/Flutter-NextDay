@@ -57,9 +57,9 @@ flutter:
     - assets/icons/pause.png
     - assets/icons/play.png
     - assets/icons/stop.png
-    - assets/icons/save.png
-    - assets/icons/about.png
-    - assets/icons/close.png
+    - assets/icons/share.png
+    - assets/icons/setting.png
+    - assets/icons/back.png
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
@@ -81,12 +81,9 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages
   fonts:
-    - family: PingFang
+    - family: SourceHanSansCN
       fonts:
-        - asset: assets/fonts/PingFang-SC.ttf
-    - family: Prompt
-      fonts:
-        - asset: assets/fonts/Prompt-Thin.ttf
-          weight: 100
-        - asset: assets/fonts/Prompt-Light.ttf
+        - asset: assets/fonts/SourceHanSansCN-ExtraLight.otf
+          weight: 200
+        - asset: assets/fonts/SourceHanSansCN-Light.otf
           weight: 300

@@ -7,10 +7,12 @@
 //
 
 #import "LocalPluginRegistrant.h"
-#import "ImageSaverPlugin.h"
+#import "NDCacheManagerPlugin.h"
+#import "NDSharePlugin.h"
 
 @implementation LocalPluginRegistrant
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
-    [ImageSaverPlugin registerWithRegistrar:[registry registrarForPlugin:@"ImageSaverPlugin"]];
+    [NDCacheManagerPlugin registerWithRegistrar:[registry registrarForPlugin:@"NDCacheManagerPlugin"]];
+    [NDSharePlugin registerWithRegistrar:[registry registrarForPlugin:@"NDSharePlugin"]];
 }
 @end
