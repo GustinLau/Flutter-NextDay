@@ -28,13 +28,13 @@ class MusicPlayer extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.only(
             left: 0,
-            top: AdaptationUtils.adaptHeight(5) / 2,
-            bottom: AdaptationUtils.adaptHeight(5) / 2,
-            right: AdaptationUtils.adaptWidth(8)),
+            top: AdaptationUtils.instance.adaptHeight(5) / 2,
+            bottom: AdaptationUtils.instance.adaptHeight(5) / 2,
+            right: AdaptationUtils.instance.adaptWidth(8)),
         child: Image.asset(
             'assets/icons/${state.playing ? (musicPlayerBloc.isSameMusic() ? 'pause' : 'stop') : 'play'}.png',
-            width: AdaptationUtils.adaptWidth(35),
-            height: AdaptationUtils.adaptHeight(35)),
+            width: AdaptationUtils.instance.adaptWidth(35),
+            height: AdaptationUtils.instance.adaptHeight(35)),
       ),
     );
   }
@@ -60,7 +60,7 @@ class MusicPlayer extends StatelessWidget {
                   color: Colors.white,
                   fontWeight: FontWeight.w300,
                   decoration: TextDecoration.none,
-                  fontSize: AdaptationUtils.adaptWidth(14)),
+                  fontSize: AdaptationUtils.instance.adaptWidth(14)),
               overflow: TextOverflow.ellipsis),
         ),
         Padding(
@@ -80,7 +80,7 @@ class MusicPlayer extends StatelessWidget {
                 fontWeight: FontWeight.w300,
                 color: Colors.white,
                 decoration: TextDecoration.none,
-                fontSize: AdaptationUtils.adaptWidth(10)),
+                fontSize: AdaptationUtils.instance.adaptWidth(10)),
             overflow: TextOverflow.ellipsis,
           ),
         )
@@ -93,19 +93,19 @@ class MusicPlayer extends StatelessWidget {
     return !state.playing
         ? Container()
         : Container(
-            height: AdaptationUtils.adaptHeight(2),
+            height: AdaptationUtils.instance.adaptHeight(2),
             margin: EdgeInsets.only(
-                left: AdaptationUtils.adaptWidth(35),
-                right: AdaptationUtils.adaptWidth(35),
-                bottom: AdaptationUtils.adaptHeight(5)),
+                left: AdaptationUtils.instance.adaptWidth(35),
+                right: AdaptationUtils.instance.adaptWidth(35),
+                bottom: AdaptationUtils.instance.adaptHeight(5)),
             color: const Color(0xAAFFFFFF),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Container(
-                width: ((AdaptationUtils.screenWidth /
-                            AdaptationUtils.deviceRatio -
-                        AdaptationUtils.adaptWidth(35) * 2 -
-                        AdaptationUtils.adaptWidth(16) * 2) *
+                width: ((AdaptationUtils.instance.screenWidth /
+                            AdaptationUtils.instance.deviceRatio -
+                        AdaptationUtils.instance.adaptWidth(35) * 2 -
+                        AdaptationUtils.instance.adaptWidth(16) * 2) *
                     state.progress),
                 color: Colors.white,
               ),

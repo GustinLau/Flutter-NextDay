@@ -127,7 +127,7 @@ class HomePageBloc extends BlocBase {
     RenderRepaintBoundary boundary =
         _state._globalKey.currentContext.findRenderObject();
     ui.Image image =
-        await boundary.toImage(pixelRatio: AdaptationUtils.deviceRatio);
+        await boundary.toImage(pixelRatio: AdaptationUtils.instance.deviceRatio);
     ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     await SharePlugin.share(byteData.buffer.asUint8List());
     MusicPlayerBloc.instance.hide(false);

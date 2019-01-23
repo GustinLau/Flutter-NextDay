@@ -43,8 +43,8 @@ class Day extends StatelessWidget {
   Widget _date() {
     return Container(
       margin: EdgeInsets.only(
-          left: AdaptationUtils.adaptWidth(16),
-          right: AdaptationUtils.adaptWidth(16)),
+          left: AdaptationUtils.instance.adaptWidth(16),
+          right: AdaptationUtils.instance.adaptWidth(16)),
       child: Text(
         info.dateKey.substring(6),
         style: TextStyle(
@@ -56,7 +56,7 @@ class Day extends StatelessWidget {
             fontWeight: FontWeight.w200,
             color: Colors.white,
             decoration: TextDecoration.none,
-            fontSize: AdaptationUtils.adaptWidth(150)),
+            fontSize: AdaptationUtils.instance.adaptWidth(150)),
       ),
     );
   }
@@ -65,9 +65,9 @@ class Day extends StatelessWidget {
   Widget _dateInfo() {
     return Container(
       margin: EdgeInsets.only(
-          left: AdaptationUtils.adaptWidth(16),
-          right: AdaptationUtils.adaptWidth(16),
-          bottom: AdaptationUtils.adaptWidth(80)),
+          left: AdaptationUtils.instance.adaptWidth(16),
+          right: AdaptationUtils.instance.adaptWidth(16),
+          bottom: AdaptationUtils.instance.adaptWidth(80)),
       child: Text(
         '${MONTHS[info.getDateTime().month - 1]}.${WEEKS[info.getDateTime().weekday - 1]}' +
             (info.event == null ? '' : ',${info.event}'),
@@ -81,7 +81,7 @@ class Day extends StatelessWidget {
             letterSpacing: 1.8,
             color: Colors.white,
             decoration: TextDecoration.none,
-            fontSize: AdaptationUtils.adaptWidth(22)),
+            fontSize: AdaptationUtils.instance.adaptWidth(22)),
       ),
     );
   }
@@ -90,9 +90,9 @@ class Day extends StatelessWidget {
   Widget _geo() {
     return Container(
       padding: EdgeInsets.only(
-          left: AdaptationUtils.adaptWidth(16),
-          right: AdaptationUtils.adaptWidth(16),
-          bottom: AdaptationUtils.adaptHeight(6)),
+          left: AdaptationUtils.instance.adaptWidth(16),
+          right: AdaptationUtils.instance.adaptWidth(16),
+          bottom: AdaptationUtils.instance.adaptHeight(6)),
       child: Text(
         info.geo.reverse,
         style: TextStyle(
@@ -104,7 +104,7 @@ class Day extends StatelessWidget {
             color: Colors.white,
             fontWeight: FontWeight.w300,
             decoration: TextDecoration.none,
-            fontSize: AdaptationUtils.adaptWidth(13.5)),
+            fontSize: AdaptationUtils.instance.adaptWidth(13.5)),
       ),
     );
   }
@@ -113,8 +113,8 @@ class Day extends StatelessWidget {
   Widget _desc() {
     return Container(
       margin: EdgeInsets.only(
-        left: AdaptationUtils.adaptWidth(16),
-        right: AdaptationUtils.adaptWidth(16),
+        left: AdaptationUtils.instance.adaptWidth(16),
+        right: AdaptationUtils.instance.adaptWidth(16),
       ),
       padding: const EdgeInsets.only(left: 4, right: 4, bottom: 2, top: 2),
       color: Color(
@@ -127,7 +127,7 @@ class Day extends StatelessWidget {
             fontWeight: FontWeight.w300,
             color: Colors.white,
             decoration: TextDecoration.none,
-            fontSize: AdaptationUtils.adaptWidth(14)),
+            fontSize: AdaptationUtils.instance.adaptWidth(14)),
       ),
     );
   }
@@ -148,12 +148,12 @@ class Day extends StatelessWidget {
       ),
       child: Container(
         padding: EdgeInsets.only(
-            left: AdaptationUtils.adaptWidth(16),
-            right: AdaptationUtils.adaptWidth(16),
-            top: AdaptationUtils.adaptHeight(50),
-            bottom: AdaptationUtils.safeAreaBottom),
+            left: AdaptationUtils.instance.adaptWidth(16),
+            right: AdaptationUtils.instance.adaptWidth(16),
+            top: AdaptationUtils.instance.adaptHeight(50),
+            bottom: AdaptationUtils.instance.safeAreaBottom),
         height:
-            (AdaptationUtils.safeAreaBottom + AdaptationUtils.adaptHeight(110)),
+            (AdaptationUtils.instance.safeAreaBottom + AdaptationUtils.instance.adaptHeight(110)),
         child: Stack(
           children: <Widget>[
             MusicPlayer(musicModel: info.music),
@@ -167,7 +167,7 @@ class Day extends StatelessWidget {
   // 照片作者
   Widget _author() {
     return Container(
-      height: AdaptationUtils.adaptHeight(35),
+      height: AdaptationUtils.instance.adaptHeight(35),
       child: Align(
         alignment: Alignment.bottomRight,
         child: Text(
@@ -175,7 +175,7 @@ class Day extends StatelessWidget {
           style: TextStyle(
               color: const Color(0x88EEEEEE),
               fontFamily: 'SourceHanSansCN',
-              fontSize: AdaptationUtils.adaptWidth(12),
+              fontSize: AdaptationUtils.instance.adaptWidth(12),
               fontWeight: FontWeight.w300,
               decoration: TextDecoration.none),
         ),
@@ -188,7 +188,7 @@ class Day extends StatelessWidget {
     return Container(
       child: CachedNetworkImage(
         placeholder: const Center(child: const CircularProgressIndicator()),
-        imageUrl: InfoModel.realImagePath(AdaptationUtils.safeAreaBottom > 0
+        imageUrl: InfoModel.realImagePath(AdaptationUtils.instance.safeAreaBottom > 0
             ? info.images['iphone-x']
             : info.images['big568h3x']),
         fit: BoxFit.cover,
@@ -233,12 +233,12 @@ class Day extends StatelessWidget {
                     const Duration(milliseconds: 300), () => bloc.share());
               },
         child: Container(
-          padding: EdgeInsets.only(bottom: AdaptationUtils.safeAreaBottom + 40),
+          padding: EdgeInsets.only(bottom: AdaptationUtils.instance.safeAreaBottom + 40),
           child: Align(
             alignment: Alignment.bottomCenter,
             child: Image.asset('assets/icons/share.png',
-                width: AdaptationUtils.adaptWidth(60),
-                height: AdaptationUtils.adaptHeight(60)),
+                width: AdaptationUtils.instance.adaptWidth(60),
+                height: AdaptationUtils.instance.adaptHeight(60)),
           ),
         ),
       ),

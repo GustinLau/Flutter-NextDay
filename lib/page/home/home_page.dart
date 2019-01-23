@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:next_day/base/bloc_base.dart';
 import 'package:next_day/page/home/home_page_bloc.dart';
 import 'package:next_day/util/adaptation_utils.dart';
@@ -11,7 +10,7 @@ import 'package:next_day/widget/music_player/music_player_bloc.dart';
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+    AdaptationUtils.instance.init(context);
     GlobalKey globalKey = GlobalKey();
     HomePageBloc bloc = BlocProvider.of(context);
     bloc.setGlobalKey(globalKey);
@@ -118,9 +117,12 @@ class HomePage extends StatelessWidget {
                                     bloc.showSetting(context);
                                   },
                                   child: Center(
-                                    child: Image.asset('assets/icons/setting.png',
-                                        width: AdaptationUtils.adaptWidth(70),
-                                        height: AdaptationUtils.adaptWidth(70)),
+                                    child: Image.asset(
+                                        'assets/icons/setting.png',
+                                        width: AdaptationUtils.instance
+                                            .adaptWidth(70),
+                                        height: AdaptationUtils.instance
+                                            .adaptWidth(70)),
                                   ),
                                 ),
                               )
